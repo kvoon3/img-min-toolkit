@@ -1,6 +1,9 @@
 # Img Min Toolkit
 
-快速生成压缩图片
+> [!IMPORTANT]
+> 该项目正处于起步阶段，仅保证有限可用性
+
+快速、批量生成压缩图片
 
 ## Readmap
 
