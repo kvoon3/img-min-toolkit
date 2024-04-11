@@ -1,0 +1,9 @@
+{
+	"scripts": {
+		"dev": "node compress.js"
+	},
+	"dependencies": {
+		"consola": "^3.2.3",
+		"sharp": "^0.33.3"
+	}
+}
