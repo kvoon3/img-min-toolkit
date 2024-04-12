@@ -48,8 +48,9 @@ async function main() {
     maxSize,
   } = config
 
-  ensureDir(output)
-  cleanDir(output)
+  await ensureDir(input)
+  await ensureDir(output)
+  await cleanDir(output)
 
   const fileNameList = await fs.readdir(input)
   fileNameList.forEach(async (fileName) => {
@@ -58,12 +59,20 @@ async function main() {
     const stats = await fs.stat(filePath)
     const fileSize = stats.size
 
-    // file size exceed 5 MB
+    // file size exceed max size
     if(+fileSize > maxSize)  {
       try {
-        await sharp(filePath)
-          .toFormat('jpeg', { mozjpeg:true })
-          .toFile(`${output}/${withoutFileType(fileName)}.jpg`)
+        const scaleFactor = Math.sqrt(maxSize / +fileSize);
+
+        const $s = await sharp(filePath)
+        const metadata = await $s.metadata();
+
+        if(metadata.width) {
+          await $s
+            .resize(Math.round(metadata.width * scaleFactor))
+            .toFormat('jpeg')
+            .toFile(`${output}/${withoutFileType(fileName)}.jpg`)
+        }
       } catch (error) {
         consola.log('error',error)
       }
