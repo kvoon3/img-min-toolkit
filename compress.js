@@ -2,7 +2,6 @@
 
 const fs = require('fs/promises')
 const sharp = require('sharp')
-const { consola } = require('consola')
 const path = require('path')
 const config = require('./compress.config')
 
@@ -55,7 +54,7 @@ async function main() {
   const fileNameList = await fs.readdir(input)
   fileNameList.forEach(async (fileName) => {
     const filePath = path.join(input, fileName)
-    consola.log('filePath',filePath)
+    console.log('filePath',filePath)
     const stats = await fs.stat(filePath)
     const fileSize = stats.size
 
@@ -64,7 +63,7 @@ async function main() {
       try {
         const scaleFactor = Math.sqrt(maxSize / +fileSize);
 
-        const $s = await sharp(filePath)
+        const $s = sharp(filePath)
         const metadata = await $s.metadata();
 
         if(metadata.width) {
@@ -74,7 +73,7 @@ async function main() {
             .toFile(`${output}/${withoutFileType(fileName)}.jpg`)
         }
       } catch (error) {
-        consola.log('error',error)
+        console.log('error', error)
       }
     }
     // copy file
@@ -82,7 +81,7 @@ async function main() {
       try {
         await fs.copyFile(filePath, path.join(output,fileName))
       } catch (error) {
-        consola.log('error',error)
+        console.log('error',error)
       }
     }
   })
