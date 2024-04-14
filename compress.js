@@ -6,6 +6,7 @@ const path = require('path')
 const config = require('./compress.config')
 const { Dirent } = require('fs')
 const { isImage, ensureDir, cleanDir, withoutFileType } = require('./utils')
+const { zip } = require('zip-a-folder')
 
 let duration = 0
 
@@ -94,6 +95,26 @@ async function handlerInput(pathName) {
   return promises
 }
 
+/**
+ * 
+ * @param {string} dirPath
+ * @returns {Promise<void | Error>}
+ */
+async function writeZip(dirPath) {
+  await zip(
+    path.resolve(dirPath),
+    path.resolve(`${dirPath}.zip`),
+  )
+
+  const files = await fs.readdir(dirPath, { withFileTypes: true })
+
+  await Promise.all(
+    files
+      .filter((i) => i.isDirectory())
+      .map((dir) => writeZip(path.join(dir.path, dir.name)))
+  )
+}
+
 function printCompressStatus() {
   const { logSettings } = config
   console.log('files:', totalFile)
@@ -123,6 +144,7 @@ async function main() {
 
   const tasks = await handlerInput(config.input)
   await Promise.all(tasks)
+  await writeZip(output)
 
   const end = new Date()
 

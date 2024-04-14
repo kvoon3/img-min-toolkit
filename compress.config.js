@@ -10,6 +10,9 @@ const imgTypes = [
 const logSettings = {
   printCompressFiles: false,
 }
+const extra = {
+  zipFolder: true,
+}
 
 module.exports = {
   Unit,
@@ -18,4 +21,5 @@ module.exports = {
   output,
   imgTypes,
   logSettings,
+  extra,
 }
