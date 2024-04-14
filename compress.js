@@ -104,9 +104,9 @@ function printCompressStatus() {
   if(logSettings.printCompressFiles)
     compressedFile.forEach((i) => console.log(`  ${i}`))
 
-  console.log('failedFiles',failedFiles.length, 'files')
+  console.log('failed files:',failedFiles.length, 'files')
   failedFiles.forEach((i) => console.log(i))
-  console.log('time', duration, 'ms')
+  console.log('time:', duration, 'ms')
 }
 
 async function main() {
