@@ -50,7 +50,7 @@ async function compressImg(file, outputPath, maxSize) {
 
         return await $s
           .resize(Math.round(metadata.width * scaleFactor))
-          .toFormat('jpeg')
+          .toFormat('jpeg', { quality: 30 })
           .toFile(path.resolve(`${outputPath}/${withoutFileType(file.name)}.jpg`))
       }
     }
@@ -86,6 +86,9 @@ async function handlerInput(pathName) {
       return await compressImg(item, destDir, config.maxSize)
     }
     else if(item.isDirectory()) {
+      if(item.path.includes('.git'))
+        return
+
       totalFolder += 1
       fs.mkdir(path.join(destDir, item.name))
       return await handlerInput(path.join(item.path, item.name))

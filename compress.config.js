@@ -1,6 +1,6 @@
 const Unit =  { MB: 1024 * 1024 }
 const maxSize = 5 * Unit.MB
-const input =  './img'
+const input =  './input'
 const output = './output'
 const imgTypes = [
   'jpg',
